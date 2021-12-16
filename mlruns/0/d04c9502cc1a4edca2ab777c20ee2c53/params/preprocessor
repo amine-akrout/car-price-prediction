@@ -1,0 +1,4 @@
+ColumnTransformer(transformers=[('cat', OneHotEncoder(handle_unknown='ignore'),
+                                 <sklearn.compose._column_transformer.make_column_selector object at 0x000001E1FB1B89D0>),
+                                ('num',
+    ...

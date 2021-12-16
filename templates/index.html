@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Car Price Prediction">
+    <meta name="description" content="">
+    <meta name="page_type" content="np-template-header-footer-from-plugin">
+    <title>index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nicepage.css') }}" media="screen">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" media="screen">
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{{ url_for('static', filename='js/nicepage.js') }}" defer=""></script>
+    <meta name="generator" content="Nicepage 4.0.3, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
+    <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
+    
+    
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": ""
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="index">
+    <meta property="og:type" content="website">
+  </head>
+  <body data-home-page="index.html" data-home-page-title="index" class="u-body">
+    <section class="u-align-center u-clearfix u-image u-section-1" id="carousel_588a" data-image-width="1280" data-image-height="853">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <div class="u-container-style u-group u-radius-50 u-shape-round u-white u-group-1">
+          <div class="u-container-layout u-container-layout-1">
+            <h2 class="u-align-center u-custom-font u-font-montserrat u-text u-text-1">Car Price Prediction</h2>
+            <div class="u-align-center u-form u-form-1">
+              <form action="/predict" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-37 u-form-vertical u-inner-form" style="padding: 49px;" source="custom" name="form" redirect="true">
+                <div class="u-form-group u-form-partition-factor-4 u-form-group-1">
+                  <label for="text-08b9" class="u-label u-label-1">Car Brand</label>
+                  <input type="text" placeholder="exemple: audi" id="text-08b9" name="CarBrand" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-1">
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-group-2">
+                  <label for="text-6150" class="u-label u-label-2">Horse power</label>
+                  <input type="text" id="text-6150" name="horsepower" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-2" placeholder="___">
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-select u-form-group-3">
+                  <label for="select-ce71" class="u-label u-label-3">Aspiration</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-ce71" name="aspiration" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-3">
+                      <option value="std">std</option>
+                      <option value="turbo">turbo</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-select u-form-group-4">
+                  <label for="select-bfaf" class="u-label u-label-4">Drive wheel</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-bfaf" name="drivewheel" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-4">
+                      <option value="rwd">rwd</option>
+                      <option value="fwd">fwd</option>
+                      <option value="4wd">4wd</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-select u-form-group-5">
+                  <label for="select-4899" class="u-label u-label-5">Engine type</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-4899" name="enginetype" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-5" autofocus="autofocus">
+                      <option value="dohc">dohc</option>
+                      <option value="ohc">ohc</option>
+                      <option value="l">l</option>
+                      <option value="rotor">rotor</option>
+                      <option value="ohcf">ohcf</option>
+                      <option value="dohcv">dohcv</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-group-6">
+                  <label for="text-94f4" class="u-label u-label-6">Engine size</label>
+                  <input type="text" placeholder="" id="text-94f4" name="enginesize" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-6">
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-select u-form-group-7">
+                  <label for="select-00a1" class="u-label u-label-7">Cylinder number</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-00a1" name="cylindernumber" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-7">
+                      <option value="two">two</option>
+                      <option value="three">three</option>
+                      <option value="four">four</option>
+                      <option value="five">five</option>
+                      <option value="six">six</option>
+                      <option value="eight">eight</option>
+                      <option value="twelve">twelve</option>
+                      <option value="other">other</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-4 u-form-select u-form-group-8">
+                  <label for="select-78fc" class="u-label u-label-8">Engine location</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-78fc" name="enginelocation" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-8">
+                      <option value="front">front</option>
+                      <option value="rear">rear</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-9">
+                  <label for="select-1f6c" class="u-label u-label-9">Fuel type</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-1f6c" name="fueltype" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-9">
+                      <option value="gas">gas</option>
+                      <option value="diesel">diesel</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-10">
+                  <label for="select-a3b9" class="u-label u-label-10">Fuel system</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-a3b9" name="fuelsystem" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-10">
+                      <option value="mpfi">mpfi</option>
+                      <option value="2bbl">2bbl</option>
+                      <option value="mfi">mfi</option>
+                      <option value="1bbl">1bbl</option>
+                      <option value="spfi">spfi</option>
+                      <option value="4bbl">4bbl</option>
+                      <option value="idi">idi</option>
+                      <option value="spdi">spdi</option>
+                      <option value="other">other</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-11">
+                  <label for="select-da5f" class="u-label u-label-11">Car body</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-da5f" name="carbody" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-11">
+                      <option value="convertible">convertible</option>
+                      <option value="hatchback">hatchback</option>
+                      <option value="sedan">sedan</option>
+                      <option value="wagon">wagon</option>
+                      <option value="hardtop">hardtop</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-select u-form-group-12">
+                  <label for="select-805f" class="u-label u-label-12">Door number</label>
+                  <div class="u-form-select-wrapper">
+                    <select id="select-805f" name="doornumber" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-12">
+                      <option value="two">two</option>
+                      <option value="four">four</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" version="1" class="u-caret"><path fill="currentColor" d="M4 8L0 4h8z"></path></svg>
+                  </div>
+                </div>
+                <div class="u-form-group u-form-partition-factor-3 u-form-group-13">
+                  <label for="text-e76a" class="u-label u-label-13">Car length</label>
+                  <input type="text" id="text-e76a" name="carlength" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-13" placeholder="___">
+                </div>
+                <div class="u-form-group u-form-partition-factor-3 u-form-group-14">
+                  <label for="text-6fac" class="u-label u-label-14">Car width</label>
+                  <input type="text" placeholder="___" id="text-6fac" name="carwidth" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-14">
+                </div>
+                <div class="u-form-group u-form-partition-factor-3 u-form-group-15">
+                  <label for="text-7367" class="u-label u-label-15">Car height</label>
+                  <input type="text" placeholder="___" id="text-7367" name="carheight" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-15">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-group-16">
+                  <label for="text-5bad" class="u-label u-label-16">Curb weight</label>
+                  <input type="text" placeholder="___" id="text-5bad" name="curbweight" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-16">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-group-17">
+                  <label for="text-e77b" class="u-label u-label-17">Wheel base</label>
+                  <input type="text" placeholder="___" id="text-e77b" name="wheelbase" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-17">
+                </div>
+                <div class="u-form-group u-form-group-18">
+                  <label for="text-8511" class="u-label u-label-18">Bore ratio</label>
+                  <input type="text" placeholder="___" id="text-8511" name="boreratio" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-18">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-group-19">
+                  <label for="text-b621" class="u-label u-label-19">City MPG</label>
+                  <input type="text" placeholder="miles per gallon" id="text-b621" name="citympg" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-19">
+                </div>
+                <div class="u-form-group u-form-partition-factor-2 u-form-group-20">
+                  <label for="text-5068" class="u-label u-label-20">Highway MPG</label>
+                  <input type="text" placeholder="miles per gallon" id="text-5068" name="highwaympg" class="u-border-2 u-border-grey-60 u-border-no-left u-border-no-right u-border-no-top u-grey-5 u-input u-input-rectangle u-radius-20 u-input-20">
+                </div>
+                <div class="u-align-center u-form-group u-form-submit">
+                  <a href="#" class="u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-dark-1 u-palette-1-base u-radius-42 u-btn-1">Submit</a>
+                  <input type="submit" value="submit" class="u-form-control-hidden" wfd-invisible="true">
+                </div>
+                <div class="u-form-send-message u-form-send-success" wfd-invisible="true"> Thank you! Your message has been sent. </div>
+                <div class="u-form-send-error u-form-send-message" wfd-invisible="true"> Unable to send your message. Please fix errors then try again. </div>
+                <input type="hidden" value="" name="recaptchaResponse" wfd-invisible="true">
+              </form>
+            </div>
+            <p class="u-align-center u-text u-text-2"> {{message}} </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+    
+    <section class="u-backlink u-clearfix u-grey-80">
+      <a class="u-link" href="https://nicepage.com/html5-template" target="_blank">
+        <span>HTML5 Templates</span>
+      </a>
+      <p class="u-text">
+        <span>created with</span>
+      </p>
+      <a class="u-link" href="https://nicepage.site" target="_blank">
+        <span>Website Builder</span>
+      </a>. 
+    </section>
+  </body>
+</html>

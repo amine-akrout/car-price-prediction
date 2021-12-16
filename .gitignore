@@ -1,0 +1,9 @@
+# python env
+venv/
+
+# python idea
+.idea/
+
+# data
+data/*
+

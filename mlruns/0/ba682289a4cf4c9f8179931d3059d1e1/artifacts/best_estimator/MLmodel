@@ -1,0 +1,27 @@
+artifact_path: best_estimator
+flavors:
+  python_function:
+    env: conda.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    python_version: 3.8.9
+  sklearn:
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.0.1
+run_id: ba682289a4cf4c9f8179931d3059d1e1
+signature:
+  inputs: '[{"name": "symboling", "type": "long"}, {"name": "fueltype", "type": "string"},
+    {"name": "aspiration", "type": "string"}, {"name": "doornumber", "type": "string"},
+    {"name": "carbody", "type": "string"}, {"name": "drivewheel", "type": "string"},
+    {"name": "enginelocation", "type": "string"}, {"name": "wheelbase", "type": "double"},
+    {"name": "carlength", "type": "double"}, {"name": "carwidth", "type": "double"},
+    {"name": "carheight", "type": "double"}, {"name": "curbweight", "type": "long"},
+    {"name": "enginetype", "type": "string"}, {"name": "cylindernumber", "type": "string"},
+    {"name": "enginesize", "type": "long"}, {"name": "fuelsystem", "type": "string"},
+    {"name": "boreratio", "type": "double"}, {"name": "stroke", "type": "double"},
+    {"name": "compressionratio", "type": "double"}, {"name": "horsepower", "type":
+    "long"}, {"name": "peakrpm", "type": "long"}, {"name": "citympg", "type": "long"},
+    {"name": "highwaympg", "type": "long"}, {"name": "CarBrand", "type": "string"}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1]}}]'
+utc_time_created: '2021-12-16 09:13:41.925240'

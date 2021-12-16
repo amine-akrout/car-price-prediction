@@ -1,0 +1,3 @@
+{
+  "XGBRegressor_score_Xt": "XGBRegressor.score(X=Xt, y=y_test)"
+}

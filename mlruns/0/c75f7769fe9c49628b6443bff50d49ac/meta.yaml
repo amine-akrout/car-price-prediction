@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/yomke/Desktop/DS/portfolio_DS/car-price-prediction/mlruns/0/c75f7769fe9c49628b6443bff50d49ac/artifacts
+end_time: 1639655024586
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: c75f7769fe9c49628b6443bff50d49ac
+run_uuid: c75f7769fe9c49628b6443bff50d49ac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1639653249069
+status: 3
+tags: []
+user_id: Amine

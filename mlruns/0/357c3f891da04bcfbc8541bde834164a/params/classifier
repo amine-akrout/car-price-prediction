@@ -1,0 +1,4 @@
+XGBRegressor(base_score=None, booster=None, colsample_bylevel=None,
+             colsample_bynode=None, colsample_bytree=0.7,
+             enable_categorical=False, gamma=None, gpu_id=None,
+             importance_type=None, interaction_constraint...

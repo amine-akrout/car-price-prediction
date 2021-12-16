@@ -1,0 +1,4 @@
+Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('cat',
+                                                  OneHotEncoder(handle_unknown='ignore'),
+                                                  <sklearn.compose....
