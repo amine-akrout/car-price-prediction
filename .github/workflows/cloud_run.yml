@@ -5,7 +5,7 @@ on:
 
 name: Build and Deploy a Container
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE: carprice
   REGION: europe-west1
 
