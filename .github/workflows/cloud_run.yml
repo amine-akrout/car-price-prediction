@@ -1,4 +1,4 @@
-name: Deploy Web app Clima to Google Cloud Run (☁🏃)
+name: Deploy Web app to Google Cloud Run
 on:
   push:
     branches:
@@ -19,7 +19,7 @@ jobs:
           version: '286.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
           service_account_email: "akrout.med.amine@gmail.com"
-          project_id: YOUR_PROJECT_ID
+          project_id: ml-dep-335415
 
       - name: Building (🏗)
         run: |-
@@ -32,6 +32,6 @@ jobs:
         with:
           service: SERVICE_ID
           image: gcr.io/ml-dep-335415/carprice
-          region: REGION
+          region: europe-west1
           credentials: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: YOUR_PROJECT_ID
+          project_id: ml-dep-335415
