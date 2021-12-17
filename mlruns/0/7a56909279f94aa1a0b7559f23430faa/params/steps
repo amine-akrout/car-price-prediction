@@ -1,3 +1,0 @@
-[('preprocessor', ColumnTransformer(transformers=[('cat', OneHotEncoder(handle_unknown='ignore'),
-                                 <sklearn.compose._column_transformer.make_column_selector object at 0x0000027BA7B49A30>),
-                          ...

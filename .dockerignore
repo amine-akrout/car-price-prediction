@@ -1,0 +1,17 @@
+# python env
+venv/
+
+# python idea
+.idea/
+
+# data
+data/*
+
+# pycache
+__pycache__/
+
+Dockerfile
+README.md
+
+
+model.py
