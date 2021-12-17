@@ -1,3 +1,3 @@
 {
-    "logged_model": "runs:/e1a88a62d842490da30daf6113776506/model"
+    "logged_model": "./mlruns/0/e1a88a62d842490da30daf6113776506/artifacts/model"
 }

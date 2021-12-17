@@ -11,6 +11,7 @@ COPY . ./
 # Install production dependencies.
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
+RUN pip install scikit-learn==1.0.1
 
 # Run the web service on container startup using gunicorn
 

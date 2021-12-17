@@ -98,6 +98,8 @@ with mlflow.start_run(run_name="run") as run:
     pprint(artifacts)
     pprint(run.info.run_id)
 
-    model_path = {'logged_model' : 'runs:/{}/model'.format(run.info.run_id)}
+    #model_path = {'logged_model' : 'runs:/{}/model'.format(run.info.run_id)}
+    model_path = {'logged_model' : 'mlruns/0/{}/artifacts/model'.format(run.info.run_id)}
+
     with open('model_path.json', 'w', encoding='utf-8') as f:
         json.dump(model_path, f, ensure_ascii=False, indent=4)
