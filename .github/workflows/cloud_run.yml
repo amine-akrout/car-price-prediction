@@ -1,37 +1,42 @@
-name: Deploy Web app to Google Cloud Run
 on:
   push:
     branches:
-      - main
+      - example-build-deploy
+
+name: Build and Deploy a Container
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  SERVICE: carprice
+  REGION: europe-west1
+
 jobs:
   deploy:
-    name: Deploying
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, 'deploy')"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      # Build and push image to Google Container Registry
-      - name: Setting up
-        uses: google-github-actions/setup-gcloud@master
-        with:
-          version: '286.0.0'
-          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          service_account_email: "akrout.med.amine@gmail.com"
-          project_id: ml-dep-335415
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true  
 
-      - name: Building (🏗)
-        run: |-
-          gcloud builds submit \
-            --tag gcr.io/ml-dep-335415/carprice
+    - name: Authorize Docker push
+      run: gcloud auth configure-docker
 
-      # Setup gcloud CLI
-      - name: Deploy (🚀)
-        uses: google-github-actions/deploy-cloudrun@main
-        with:
-          service: SERVICE_ID
-          image: gcr.io/ml-dep-335415/carprice
-          region: europe-west1
-          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: ml-dep-335415
+    - name: Build and Push Container
+      run: |-
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} 
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0
+      with:
+        service: ${{ env.SERVICE }}
+        image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        region: ${{ env.REGION }}
+
+    - name: Show Output
+      run: echo ${{ steps.deploy.outputs.url }}
