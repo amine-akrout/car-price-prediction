@@ -10,7 +10,7 @@ data/*
 # pycache
 __pycache__/
 
-Dockerfile
+
 README.md
 
 
