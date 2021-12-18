@@ -30,7 +30,6 @@ def render_message():
     try:
         # Get data input
         CarBrand = request.form['CarBrand']
-        print(CarBrand)
         fueltype = request.form['fueltype']
         aspiration = request.form['aspiration']
         doornumber = request.form['doornumber']
@@ -42,7 +41,6 @@ def render_message():
         carwidth = float(request.form['carwidth'])
         carheight = float(request.form['carheight'])
         curbweight = int(request.form['curbweight'])
-        print(curbweight)
         enginetype = request.form['enginetype']
         cylindernumber = request.form['cylindernumber']
         enginesize = int(request.form['enginesize'])
@@ -57,10 +55,8 @@ def render_message():
         df = pd.DataFrame(data, columns = ['CarBrand', 'fueltype', 'aspiration', 'doornumber', 'carbody', 'drivewheel',
                             'enginelocation', 'wheelbase', 'carlength', 'carwidth', 'carheight','curbweight', 'enginetype',
                             'cylindernumber', 'enginesize','fuelsystem', 'boreratio', 'horsepower', 'citympg', 'highwaympg'])
-        print(df.head())
 
         preds = loaded_model.predict(pd.DataFrame(df))
-        print(preds)
 
         print('Python module executed successfully')
         message = 'Estimated price : {} '.format(preds[0])
@@ -75,4 +71,4 @@ def render_message():
     return render_template('index.html' ,message=message)
 
 if __name__ == '__main__':
-    app.run(debug=True , host='localhost', port=int(os.environ.get("PORT", 8080)))
+    app.run(debug=True , host='localhost', port=8080)
