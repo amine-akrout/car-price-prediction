@@ -59,7 +59,7 @@ def render_message():
         preds = loaded_model.predict(pd.DataFrame(df))
 
         print('Python module executed successfully')
-        message = 'Estimated price : {} '.format(preds[0])
+        message = 'Estimated price : {} '.format(round(preds[0],2))
         print(message, file=sys.stderr)
 
     except Exception as e:
