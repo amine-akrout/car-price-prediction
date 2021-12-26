@@ -2,18 +2,11 @@
 from __future__ import print_function
 import sys
 import mlflow
-import requests
-import json
 from flask import Flask, render_template, request
 import pandas as pd
-import os
 
 
-with open('model_path.json') as json_file:
-    data = json.load(json_file)
-
-logged_model = data['logged_model']
-
+logged_model = './model'
 # Load model as a PyFuncModel.
 loaded_model = mlflow.pyfunc.load_model(logged_model)
 

@@ -2,13 +2,15 @@ import pandas as pd
 import numpy as np
 import json
 from pprint import pprint
+import shutil
 
-from sklearn.compose import ColumnTransformer
+from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+
 
 from xgboost import XGBRegressor
 
@@ -42,14 +44,13 @@ categorical_transformer = OneHotEncoder(handle_unknown="ignore")
 
 preprocessor = ColumnTransformer(
     transformers=[
-        ("cat", categorical_transformer, selector(dtype_include="object")),
-        ("num", numeric_transformer, selector(dtype_exclude="object")),
+        ("cat", categorical_transformer, make_column_selector(dtype_include="object")),
+        ("num", numeric_transformer, make_column_selector(dtype_exclude="object")),
     ]
 )
 
 clf = Pipeline(
     steps=[("preprocessor", preprocessor),
-           #('selector', SelectKBest(chi2, k=5)),
            ("classifier", XGBRegressor())]
 )
 
@@ -98,8 +99,8 @@ with mlflow.start_run(run_name="run") as run:
     pprint(artifacts)
     pprint(run.info.run_id)
 
-    #model_path = {'logged_model' : 'runs:/{}/model'.format(run.info.run_id)}
-    model_path = {'logged_model' : 'mlruns/0/{}/artifacts/model'.format(run.info.run_id)}
+    model_path = 'mlruns/0/{}/artifacts/model'.format(run.info.run_id)
 
-    with open('model_path.json', 'w', encoding='utf-8') as f:
-        json.dump(model_path, f, ensure_ascii=False, indent=4)
+    shutil.copytree(model_path, './model', dirs_exist_ok=True)
+
+    

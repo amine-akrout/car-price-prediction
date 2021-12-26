@@ -10,6 +10,5 @@ data/*
 # pycache
 __pycache__/
 
-# mlflow articats except our best model
+# mlflow articats 
 mlruns/*
-!./mlruns/0/e1a88a62d842490da30daf6113776506
