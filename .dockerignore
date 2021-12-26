@@ -8,7 +8,7 @@ venv/
 data/*
 
 # pycache
-__pycache__/
+__pycache__
 
 
 README.md
