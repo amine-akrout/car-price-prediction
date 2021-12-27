@@ -20,6 +20,9 @@ pip install -r requirements.txt
 python ./model.py
 </pre>
 
+**MLflow experiment**
+![demo_webapp](./demo/mlflow.JPG)  
+
 ## Test locally
 To test the web app locally using docker, start by building the image from the Dockerfile
 <pre>
@@ -32,6 +35,8 @@ PORT=8080 && docker run -p 9090:${PORT} -e PORT=${PORT} carprice
 the Web app should be runnining on http://localhost:9090/
 
 ## Deploy to cloud Run
+
+
 <pre>
 gcloud builds submit --tag gcr.io/$PROJECT_ID/carprice  --project=$PROJECT_ID
 
@@ -44,4 +49,11 @@ Using Github actions and [cloud-run.yml](https://github.com/amine-akrout/car-pri
 ## Demo
 
 
-![demo_webapp](./demo/webapp.gif)
+![demo_webapp](./demo/webapp.gif)  
+
+
+
+## References:
+* Data can be found here: [kaggle](https://www.kaggle.com/iadelas/car-price-prediction-rf-92/data)
+* Federico Tartarini [Continuous deployment to Google Cloud Run using GitHub Actions](https://youtu.be/NCa0RTSUEFQ)
+* Michael Harmon [GreenBuildings3: Build & Deploy Models With MLflow & Docker](http://michael-harmon.com/blog/GreenBuildings3.html)
