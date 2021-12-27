@@ -27,13 +27,21 @@ docker build --pull --rm -f "Dockerfile" -t carprice:latest "."
 </pre>
 
 <pre>
-docker run --rm -d  carprice:latest
+PORT=8080 && docker run -p 9090:${PORT} -e PORT=${PORT} carprice
 </pre>
+the Web app should be runnining on http://localhost:9090/
 
 ## Deploy to cloud Run
 <pre>
+gcloud builds submit --tag gcr.io/$PROJECT_ID/carprice  --project=$PROJECT_ID
+
+gcloud run deploy --image gcr.io/$PROJECT_ID/carprice --platform managed  --project=$PROJECT_ID --allow-unauthenticated
 </pre>
 
+## CI/CD workflow
+Using Github actions and [cloud-run.yml](https://github.com/amine-akrout/car-price-prediction/blob/main/.github/workflows/cloud_run.yml), we could continuously deploy the web app by simply using the term "deploy" in the commit message when pushing to main branch
+
 ## Demo
-<pre>
-</pre>
+
+
+![demo_webapp](./demo/webapp.gif)
