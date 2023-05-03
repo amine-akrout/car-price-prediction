@@ -1,0 +1,13 @@
+[tool.pylint.messages_control]
+
+disable = [
+    "too-many-locals",
+    "invalid-name",
+    "broad-except",
+    "import-error",
+    "unused-variable"
+]
+
+[tool.black]
+line-length = 88
+experimental-string-processing = true

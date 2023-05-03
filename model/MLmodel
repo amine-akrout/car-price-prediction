@@ -4,12 +4,12 @@ flavors:
     env: conda.yaml
     loader_module: mlflow.sklearn
     model_path: model.pkl
-    python_version: 3.8.9
+    python_version: 3.8.13
   sklearn:
     pickled_model: model.pkl
     serialization_format: cloudpickle
     sklearn_version: 1.0.1
-run_id: e70638ac1cfb4c82966fb521facddb25
+run_id: cec1e1f17d1f4776bd3e34d4ed3f96a9
 signature:
   inputs: '[{"name": "fueltype", "type": "string"}, {"name": "aspiration", "type":
     "string"}, {"name": "doornumber", "type": "string"}, {"name": "carbody", "type":
@@ -23,4 +23,4 @@ signature:
     "type": "long"}, {"name": "highwaympg", "type": "long"}, {"name": "CarBrand",
     "type": "string"}]'
   outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1]}}]'
-utc_time_created: '2021-12-26 11:06:22.359971'
+utc_time_created: '2023-05-02 16:30:41.061465'

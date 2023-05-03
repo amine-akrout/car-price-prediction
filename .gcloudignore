@@ -10,5 +10,7 @@ data/*
 # pycache
 __pycache__/
 
-# mlflow articats 
-mlruns/*
+README.md
+
+
+model.py
