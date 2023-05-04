@@ -9,7 +9,7 @@ flavors:
     pickled_model: model.pkl
     serialization_format: cloudpickle
     sklearn_version: 1.0.1
-run_id: cec1e1f17d1f4776bd3e34d4ed3f96a9
+run_id: eb82bedb4e68484aa44091e2334383c4
 signature:
   inputs: '[{"name": "fueltype", "type": "string"}, {"name": "aspiration", "type":
     "string"}, {"name": "doornumber", "type": "string"}, {"name": "carbody", "type":
@@ -23,4 +23,4 @@ signature:
     "type": "long"}, {"name": "highwaympg", "type": "long"}, {"name": "CarBrand",
     "type": "string"}]'
   outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1]}}]'
-utc_time_created: '2023-05-02 16:30:41.061465'
+utc_time_created: '2023-05-04 16:36:35.885104'

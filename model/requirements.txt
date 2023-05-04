@@ -5,5 +5,4 @@ mypy-extensions==0.4.3
 pathlib==1.0.1
 psutil==5.9.1
 scikit-learn==1.0.1
-typing-extensions==4.3.0
 xgboost==1.5.0

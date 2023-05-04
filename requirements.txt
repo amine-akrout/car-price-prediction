@@ -6,3 +6,4 @@ cloudpickle==2.0.0
 scikit-learn==1.0.1
 xgboost==1.5.0
 structlog
+prefect==2.10.6
