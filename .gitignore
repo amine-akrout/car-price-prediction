@@ -3,6 +3,10 @@ venv/
 
 # python idea
 .idea/
+.vscode/
+
+# prefect 
+.prefect/
 
 # data
 data/*
@@ -10,5 +14,8 @@ data/*
 # pycache
 __pycache__/
 
-# mlflow articats 
-mlruns/*
+# mlflow mlruns
+training/mlruns/*
+
+# tests
+tests/

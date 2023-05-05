@@ -27,7 +27,7 @@ warnings.filterwarnings("ignore")
 logger = structlog.get_logger()
 
 
-@task(log_prints=True, cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1))
+@task(log_prints=True, cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1), tags=["read_data"])
 def read_data(data_path: str) -> pd.DataFrame:
     """
     Read data from a csv file
@@ -42,11 +42,10 @@ def read_data(data_path: str) -> pd.DataFrame:
         data = pd.read_csv(data_path)
     except FileNotFoundError:
         logger.error("File not found")
-        return None
     return data
 
 
-@task(log_prints=True)
+@task(log_prints=True, tags=["preprocess"])
 def preprocess(data: pd.DataFrame) -> pd.DataFrame:
     """
     Preprocess the data
@@ -79,7 +78,7 @@ def preprocess(data: pd.DataFrame) -> pd.DataFrame:
     return cleaned_df
 
 
-@task(log_prints=True)
+@task(log_prints=True, tags=["create_classifier"])
 def create_classifier() -> Pipeline:
     """
     Create a classifier pipeline
@@ -112,7 +111,7 @@ def create_classifier() -> Pipeline:
     return clf
 
 
-@task(log_prints=True)
+@task(log_prints=True, tags=["split_data"])
 def split_data(data: pd.DataFrame, target: str = "price") -> tuple:
     """
     Split data into train and test sets
@@ -151,7 +150,7 @@ def fetch_logged_data(run_id: str) -> tuple:
     return data.params, data.metrics, tags, artifacts
 
 
-@task(log_prints=True)
+@task(log_prints=True, tags=["hyperparameters_optimization"])
 def hyperparameters_optimization(clf, X_train, y_train):
     """
     Hyperparameters optimization
@@ -169,13 +168,13 @@ def hyperparameters_optimization(clf, X_train, y_train):
     param_grid = {
         # "preprocessor__num__imputer__strategy": ["mean", "median"],
         "classifier__max_depth": [6, 7, 8],
-        "classifier__learning_rate": [0.01, 0.015],
-        "classifier__min_child_weight": [1, 2, 3],
-        "classifier__subsample": [0.8, 0.9],
-        "classifier__colsample_bytree": [0.7, 0.8],
-        "classifier__n_estimators": [500],  # 600, 700],
-        # "classifier__reg_alpha" : [0, 0.05],
-        # "classifier__reg_lambda" : [0, 0.05],
+        # "classifier__learning_rate": [0.01, 0.015],
+        # "classifier__min_child_weight": [1, 2, 3],
+        # "classifier__subsample": [0.8, 0.9],
+        # "classifier__colsample_bytree": [0.7, 0.8],
+        # "classifier__n_estimators": [500],  # 600, 700],
+        # # "classifier__reg_alpha" : [0, 0.05],
+        # # "classifier__reg_lambda" : [0, 0.05],
         "classifier__objective": ["reg:squarederror"],
     }
     with mlflow.start_run(run_name="run") as run:
@@ -197,11 +196,11 @@ def hyperparameters_optimization(clf, X_train, y_train):
         model_path = "mlruns/0/{}/artifacts/model".format(run.info.run_id)
         logger.info("Saving model to %s", model_path)
 
-        shutil.copytree(model_path, "./model", dirs_exist_ok=True)
+        shutil.copytree(model_path, "../model", dirs_exist_ok=True)
     return grid_search.best_estimator_
 
 
-@task(log_prints=True)
+@task(log_prints=True, tags=["train_model"])
 def train_model(best_estimator, X_train, y_train, X_test, y_test):
     """
     Train a model with the best hyperparameters
@@ -233,13 +232,13 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         shutil.copytree(model_path, "./model", dirs_exist_ok=True)
 
 
-@flow(name="Traininig flow")
+@flow(name="trainig")
 def main():
     """
     Main function
     """
     mlflow.sklearn.autolog(silent=True)
-    data_path = "data/CarPrice_Assignment.csv"
+    data_path = "../data/CarPrice_Assignment.csv"
     data = read_data(data_path)
     cleaned_data = preprocess(data)
     X_train, X_test, y_train, y_test = split_data(cleaned_data)

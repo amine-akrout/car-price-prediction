@@ -4,14 +4,14 @@ This is a simple Flask web app that predicts the price of a car based on the use
 from __future__ import print_function
 import os
 import sys
-import mlflow
+from mlflow.pyfunc import load_model
 from flask import Flask, render_template, request
 import pandas as pd
 
 
 MODEL_PATH = "./model"
 # Load model as a PyFuncModel.
-LOADED_MODEL = mlflow.pyfunc.load_model(MODEL_PATH)
+LOADED_MODEL = load_model(MODEL_PATH)
 
 
 app = Flask(__name__)
