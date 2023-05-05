@@ -6,6 +6,4 @@ pytest==7.1.2
 scikit_learn==1.2.2
 structlog==23.1.0
 xgboost==1.7.5
-
-# prefect-docker>0.1.0
-# pypiwin32==223
+arguments==1.4.0

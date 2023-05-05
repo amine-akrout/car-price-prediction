@@ -15,7 +15,7 @@ data/*
 __pycache__/
 
 # mlflow mlruns
-training/mlruns/*
+mlruns/*
 
 # tests
 tests/

@@ -7,6 +7,7 @@ https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/
 import shutil
 import warnings
 from datetime import timedelta
+from pathlib import Path
 
 import mlflow
 import mlflow.xgboost
@@ -26,8 +27,15 @@ warnings.filterwarnings("ignore")
 
 logger = structlog.get_logger()
 
+SRC_DIR = Path(__file__).parent
 
-@task(log_prints=True, cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1), tags=["read_data"])
+
+@task(
+    log_prints=True,
+    cache_key_fn=task_input_hash,
+    cache_expiration=timedelta(days=1),
+    tags=["read_data"],
+)
 def read_data(data_path: str) -> pd.DataFrame:
     """
     Read data from a csv file
@@ -38,11 +46,12 @@ def read_data(data_path: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: data
     """
-    try:
-        data = pd.read_csv(data_path)
-    except FileNotFoundError:
+    # retun empty dataframe if file not found
+    if not Path(data_path).exists():
         logger.error("File not found")
-    return data
+        return pd.DataFrame()
+    logger.info("Reading data ...")
+    return pd.read_csv(data_path)
 
 
 @task(log_prints=True, tags=["preprocess"])
@@ -61,17 +70,13 @@ def preprocess(data: pd.DataFrame) -> pd.DataFrame:
     cleaned_df = cleaned_df.drop(
         ["car_ID", "symboling", "stroke", "compressionratio", "peakrpm"], axis=1
     )
-    cleaned_df["CarBrand"] = cleaned_df["CarName"].str.split(" ", n=1, expand=True)[
-        0]
+    cleaned_df["CarBrand"] = cleaned_df["CarName"].str.split(" ", n=1, expand=True)[0]
     cleaned_df = cleaned_df.drop("CarName", axis=1)
-    cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace(
-        "alfa-romero", "alfa-romeo")
+    cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace("alfa-romero", "alfa-romeo")
     cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace("maxda", "mazda")
     cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace("Nissan", "nissan")
-    cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace(
-        "porcshce", "porsche")
-    cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace(
-        "toyouta", "toyota")
+    cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace("porcshce", "porsche")
+    cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace("toyouta", "toyota")
     cleaned_df["CarBrand"] = cleaned_df["CarBrand"].replace(
         ["vokswagen", "vw"], "volkswagen"
     )
@@ -191,12 +196,6 @@ def hyperparameters_optimization(clf, X_train, y_train):
         logger.info("Best score: %f", grid_search.best_score_)
         logger.info("Best parameters: %s", grid_search.best_params_)
         logger.info("Best estimator: %s", grid_search.best_estimator_)
-        logger.info("Run ID: %s", run.info.run_id)
-
-        model_path = "mlruns/0/{}/artifacts/model".format(run.info.run_id)
-        logger.info("Saving model to %s", model_path)
-
-        shutil.copytree(model_path, "../model", dirs_exist_ok=True)
     return grid_search.best_estimator_
 
 
@@ -227,18 +226,22 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         logger.info("tags: %s", tags)
         logger.info("artifacts: %s", artifacts)
         logger.info("Run ID: %s", run.info.run_id)
-        model_path = "mlruns/0/{}/artifacts/model".format(run.info.run_id)
+        model_path = str(SRC_DIR.parent) + "/mlruns/0/{}/artifacts/model".format(
+            run.info.run_id
+        )
+        artifacts_path = str(SRC_DIR.parent) + "/model"
         logger.info("Saving model to %s", model_path)
-        shutil.copytree(model_path, "./model", dirs_exist_ok=True)
+        shutil.copytree(model_path, artifacts_path, dirs_exist_ok=True)
 
 
-@flow(name="trainig")
-def main():
+@flow(name="training")
+def training_flow():
     """
-    Main function
+    training flow
     """
     mlflow.sklearn.autolog(silent=True)
-    data_path = "../data/CarPrice_Assignment.csv"
+    data_path = SRC_DIR.parent / "data" / "CarPrice_Assignment.csv"
+    print(data_path)
     data = read_data(data_path)
     cleaned_data = preprocess(data)
     X_train, X_test, y_train, y_test = split_data(cleaned_data)
@@ -248,4 +251,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    training_flow()
