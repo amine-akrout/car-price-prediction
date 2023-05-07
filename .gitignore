@@ -10,12 +10,15 @@ venv/
 
 # data
 data/*
-
+training/data/*
 # pycache
 __pycache__/
 
 # mlflow mlruns
 mlruns/*
-
+training/mlruns/*
 # tests
 tests/
+
+# kaggle api token
+kaggle.json

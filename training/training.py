@@ -22,18 +22,20 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBRegressor
+from get_data import get_data
 
 warnings.filterwarnings("ignore")
 
 logger = structlog.get_logger()
 
-SRC_DIR = Path(__file__).parent
+SRC_DIR = Path(__file__).resolve().parent
 
 
 @task(
     log_prints=True,
     cache_key_fn=task_input_hash,
-    cache_expiration=timedelta(days=1),
+    cache_expiration=timedelta(days=7),
+    retries=3,
     tags=["read_data"],
 )
 def read_data(data_path: str) -> pd.DataFrame:
@@ -48,8 +50,9 @@ def read_data(data_path: str) -> pd.DataFrame:
     """
     # retun empty dataframe if file not found
     if not Path(data_path).exists():
-        logger.error("File not found")
-        return pd.DataFrame()
+        logger.error("File not found, downloading data from kaggle...")
+        get_data()
+        return pd.read_csv("data/CarPrice_Assignment.csv")
     logger.info("Reading data ...")
     return pd.read_csv(data_path)
 
@@ -226,7 +229,7 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         logger.info("tags: %s", tags)
         logger.info("artifacts: %s", artifacts)
         logger.info("Run ID: %s", run.info.run_id)
-        model_path = str(SRC_DIR.parent) + "/mlruns/0/{}/artifacts/model".format(
+        model_path = str(SRC_DIR) + "/mlruns/0/{}/artifacts/model".format(
             run.info.run_id
         )
         artifacts_path = str(SRC_DIR.parent) + "/model"
@@ -240,7 +243,7 @@ def training_flow():
     training flow
     """
     mlflow.sklearn.autolog(silent=True)
-    data_path = SRC_DIR.parent / "data" / "CarPrice_Assignment.csv"
+    data_path = SRC_DIR.parent / "data2" / "CarPrice_Assignment.csv"
     print(data_path)
     data = read_data(data_path)
     cleaned_data = preprocess(data)

@@ -5,7 +5,7 @@ venv/
 .idea/
 
 # data
-data/*
+# data/*
 
 # pycache
 __pycache__

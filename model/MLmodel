@@ -14,8 +14,8 @@ flavors:
     serialization_format: cloudpickle
     sklearn_version: 1.2.2
 mlflow_version: 2.3.1
-model_uuid: d52e5dd4b727445d979e0a7d721aff8a
-run_id: b2e60b2366c14defa18bf68c35b593a5
+model_uuid: 06e7230358da44538958794c4db5f50f
+run_id: 36f8f975f8c94ef689650ce67a9a7610
 signature:
   inputs: '[{"name": "fueltype", "type": "string"}, {"name": "aspiration", "type":
     "string"}, {"name": "doornumber", "type": "string"}, {"name": "carbody", "type":
@@ -29,4 +29,4 @@ signature:
     "type": "long"}, {"name": "highwaympg", "type": "long"}, {"name": "CarBrand",
     "type": "string"}]'
   outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1]}}]'
-utc_time_created: '2023-05-05 15:00:52.996783'
+utc_time_created: '2023-05-07 14:05:26.357164'
