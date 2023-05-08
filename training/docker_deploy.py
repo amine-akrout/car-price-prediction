@@ -8,9 +8,9 @@ interval_schedule = IntervalSchedule(interval=timedelta(minutes=10))
 
 docker_dep = Deployment.build_from_flow(
     flow=training_flow,
-    name="model-training2",
+    name="model-training",
     infra_overrides={"env": {"PREFECT_LOGGING_LEVEL": "DEBUG"}},
-    work_queue_name="test",
+    work_queue_name="default",
     schedule= interval_schedule,
 )
 

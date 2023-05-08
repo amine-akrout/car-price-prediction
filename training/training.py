@@ -185,7 +185,6 @@ def hyperparameters_optimization(clf, X_train, y_train):
         # # "classifier__reg_lambda" : [0, 0.05],
         "classifier__objective": ["reg:squarederror"],
     }
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
     with mlflow.start_run(run_name="hp_opt") as run:
 
         grid_search = GridSearchCV(clf, param_grid, cv=5, verbose=4, n_jobs=-1)
@@ -203,6 +202,18 @@ def hyperparameters_optimization(clf, X_train, y_train):
     return grid_search.best_estimator_
 
 
+def save_mlflow_model(best_estimator: Pipeline, model_path: str = "model"):
+    """
+    Save the model in MLflow
+    """
+    local_path = Path(model_path)
+    if local_path.exists():
+        shutil.rmtree(local_path)
+    mlflow.sklearn.save_model(
+        sk_model=best_estimator,
+        path=local_path,
+    )
+
 @task(log_prints=True, tags=["train_model"])
 def train_model(best_estimator, X_train, y_train, X_test, y_test):
     """
@@ -219,7 +230,6 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         sklearn.pipeline.Pipeline: trained classifier pipeline
     """
     logger.info("Training model ...")
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
     with mlflow.start_run(run_name="best_estimator") as run:
         best_estimator.fit(X_train, y_train)
         y_pred = best_estimator.predict(X_test)
@@ -250,6 +260,8 @@ def training_flow():
     training flow
     """
     mlflow.sklearn.autolog(silent=True)
+    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+
     data_path = SRC_DIR.parent / "data" / "CarPrice_Assignment.csv"
     data = read_data(data_path)
     cleaned_data = preprocess(data)
