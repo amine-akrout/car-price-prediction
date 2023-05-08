@@ -17,6 +17,8 @@ __pycache__/
 # mlflow mlruns
 mlruns/*
 training/mlruns/*
+training/model/*
+mlflow.db
 # tests
 tests/
 

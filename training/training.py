@@ -175,7 +175,7 @@ def hyperparameters_optimization(clf, X_train, y_train):
     # gridsearsh
     param_grid = {
         # "preprocessor__num__imputer__strategy": ["mean", "median"],
-        "classifier__max_depth": [6, 7, 8],
+        "classifier__max_depth": [6], #[6, 7, 8],
         # "classifier__learning_rate": [0.01, 0.015],
         # "classifier__min_child_weight": [1, 2, 3],
         # "classifier__subsample": [0.8, 0.9],
@@ -185,7 +185,8 @@ def hyperparameters_optimization(clf, X_train, y_train):
         # # "classifier__reg_lambda" : [0, 0.05],
         "classifier__objective": ["reg:squarederror"],
     }
-    with mlflow.start_run(run_name="run") as run:
+    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    with mlflow.start_run(run_name="hp_opt") as run:
 
         grid_search = GridSearchCV(clf, param_grid, cv=5, verbose=4, n_jobs=-1)
 
@@ -218,10 +219,13 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         sklearn.pipeline.Pipeline: trained classifier pipeline
     """
     logger.info("Training model ...")
-    with mlflow.start_run(run_name="run") as run:
+    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    with mlflow.start_run(run_name="best_estimator") as run:
         best_estimator.fit(X_train, y_train)
         y_pred = best_estimator.predict(X_test)
         mse = mean_squared_error(y_test, y_pred)
+        # log mse
+        mlflow.log_metric("test_mse", mse)
         logger.info("mse: %s", mse)
         params, metrics, tags, artifacts = fetch_logged_data(run.info.run_id)
         logger.info("params: %s", params)
@@ -229,13 +233,16 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         logger.info("tags: %s", tags)
         logger.info("artifacts: %s", artifacts)
         logger.info("Run ID: %s", run.info.run_id)
-        model_path = str(SRC_DIR) + "/mlruns/0/{}/artifacts/model".format(
-            run.info.run_id
+        # shutil.copytree(model_path, artifacts_path, dirs_exist_ok=True)
+        logger.info("Saving model")
+        # Delete the existing "model" directory and its contents if it exists
+        model_path = Path("model")
+        if model_path.exists():
+            shutil.rmtree("model")
+        mlflow.sklearn.save_model(
+            sk_model=best_estimator,
+            path="model",
         )
-        artifacts_path = str(SRC_DIR.parent) + "/model"
-        logger.info("Saving model to %s", model_path)
-        shutil.copytree(model_path, artifacts_path, dirs_exist_ok=True)
-
 
 @flow(name="training")
 def training_flow():
@@ -243,8 +250,7 @@ def training_flow():
     training flow
     """
     mlflow.sklearn.autolog(silent=True)
-    data_path = SRC_DIR.parent / "data2" / "CarPrice_Assignment.csv"
-    print(data_path)
+    data_path = SRC_DIR.parent / "data" / "CarPrice_Assignment.csv"
     data = read_data(data_path)
     cleaned_data = preprocess(data)
     X_train, X_test, y_train, y_test = split_data(cleaned_data)
