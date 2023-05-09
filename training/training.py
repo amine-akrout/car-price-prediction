@@ -22,7 +22,7 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBRegressor
-from get_data import get_data
+from .get_data import download_data
 
 warnings.filterwarnings("ignore")
 
@@ -51,7 +51,7 @@ def read_data(data_path: str) -> pd.DataFrame:
     # retun empty dataframe if file not found
     if not Path(data_path).exists():
         logger.error("File not found, downloading data from kaggle...")
-        get_data()
+        download_data()
         return pd.read_csv("data/CarPrice_Assignment.csv")
     logger.info("Reading data ...")
     return pd.read_csv(data_path)

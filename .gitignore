@@ -19,8 +19,6 @@ mlruns/*
 training/mlruns/*
 training/model/*
 mlflow.db
-# tests
-tests/
 
 # kaggle api token
 kaggle.json

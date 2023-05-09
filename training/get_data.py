@@ -13,7 +13,7 @@ import structlog
 logger = structlog.get_logger()
 
 
-def get_data():
+def download_data():
     """
     Get data from Kaggle and save it to data folder in the root directory
     """

@@ -11,7 +11,7 @@ docker_dep = Deployment.build_from_flow(
     name="model-training",
     infra_overrides={"env": {"PREFECT_LOGGING_LEVEL": "DEBUG"}},
     work_queue_name="default",
-    schedule= interval_schedule,
+    schedule= interval_schedule
 )
 
 if __name__ == "__main__":
