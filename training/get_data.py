@@ -22,11 +22,7 @@ def download_data():
         kaggle_api_key = json.load(file)
     os.environ["KAGGLE_USERNAME"] = kaggle_api_key["username"]
     os.environ["KAGGLE_KEY"] = kaggle_api_key["key"]
-    os.system(
-        "kaggle datasets download -d shaistashaikh/carprice-assignment"
-    )
+    os.system("kaggle datasets download -d shaistashaikh/carprice-assignment")
     with zipfile.ZipFile("carprice-assignment.zip", "r") as zip_ref:
         zip_ref.extractall("./data")
     os.remove("carprice-assignment.zip")
-
-

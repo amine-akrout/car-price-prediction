@@ -22,6 +22,7 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBRegressor
+
 from .get_data import download_data
 
 warnings.filterwarnings("ignore")
@@ -175,7 +176,7 @@ def hyperparameters_optimization(clf, X_train, y_train):
     # gridsearsh
     param_grid = {
         # "preprocessor__num__imputer__strategy": ["mean", "median"],
-        "classifier__max_depth": [6], #[6, 7, 8],
+        "classifier__max_depth": [6],  # [6, 7, 8],
         # "classifier__learning_rate": [0.01, 0.015],
         # "classifier__min_child_weight": [1, 2, 3],
         # "classifier__subsample": [0.8, 0.9],
@@ -213,6 +214,7 @@ def save_mlflow_model(best_estimator: Pipeline, model_path: str = "model"):
         sk_model=best_estimator,
         path=local_path,
     )
+
 
 @task(log_prints=True, tags=["train_model"])
 def train_model(best_estimator, X_train, y_train, X_test, y_test):
@@ -253,6 +255,7 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
             sk_model=best_estimator,
             path="model",
         )
+
 
 @flow(name="training")
 def training_flow():

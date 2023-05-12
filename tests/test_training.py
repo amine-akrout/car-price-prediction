@@ -5,8 +5,10 @@ Module to test the training module
 import pandas as pd
 import pytest
 from sklearn.pipeline import Pipeline
-from training.training import create_classifier, preprocess, split_data
 from xgboost import XGBRegressor
+
+from training.training import create_classifier, preprocess, split_data
+
 
 @pytest.fixture(scope="session")
 def data():

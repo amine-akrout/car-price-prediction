@@ -1,2 +1,9 @@
-from .training import read_data, preprocess, split_data, create_classifier, hyperparameters_optimization, train_model
 from .get_data import download_data
+from .training import (
+    create_classifier,
+    hyperparameters_optimization,
+    preprocess,
+    read_data,
+    split_data,
+    train_model,
+)
