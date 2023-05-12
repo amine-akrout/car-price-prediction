@@ -5,14 +5,20 @@ from __future__ import print_function
 
 import os
 import sys
+from datetime import datetime
 
 import pandas as pd
 from flask import Flask, render_template, request
 from mlflow.pyfunc import load_model
+from pymongo import MongoClient
 
 MODEL_PATH = "./model"
 # Load model as a PyFuncModel.
 LOADED_MODEL = load_model(MODEL_PATH)
+
+client = MongoClient("mongodb://mongo:27017")
+db = client["car_prediction"]
+collection = db["predictions"]
 
 
 app = Flask(__name__)
@@ -105,6 +111,33 @@ def render_message():
         print("Python module executed successfully")
         message = "Estimated price : {} ".format(round(preds[0], 2))
         print(message, file=sys.stderr)
+
+        # Save the data and prediction to MongoDB
+        prediction_data = {
+            "CarBrand": CarBrand,
+            "fueltype": fueltype,
+            "aspiration": aspiration,
+            "doornumber": doornumber,
+            "carbody": carbody,
+            "drivewheel": drivewheel,
+            "enginelocation": enginelocation,
+            "wheelbase": float(wheelbase),
+            "carlength": float(carlength),
+            "carwidth": float(carwidth),
+            "carheight": float(carheight),
+            "curbweight": int(curbweight),
+            "enginetype": enginetype,
+            "cylindernumber": cylindernumber,
+            "enginesize": int(enginesize),
+            "fuelsystem": fuelsystem,
+            "boreratio": float(boreratio),
+            "horsepower": int(horsepower),
+            "citympg": int(citympg),
+            "highwaympg": int(highwaympg),
+            "predicted_price": float(preds[0]),
+            "created_at": datetime.utcnow(),
+        }
+        collection.insert_one(prediction_data)
 
     except Exception as error:
         # Store error to pass to the web page

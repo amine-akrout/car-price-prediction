@@ -5,7 +5,7 @@ venv/
 .idea/
 .vscode/
 
-# prefect 
+# prefect
 .prefect/
 
 # data
@@ -22,3 +22,9 @@ mlflow.db
 
 # kaggle api token
 kaggle.json
+
+# model
+model/*
+
+# mongo db data
+serving/mongo_data/*

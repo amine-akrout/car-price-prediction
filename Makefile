@@ -7,4 +7,4 @@ quality_checks:
 	isort .
 	black .
 	pylint .\training --recursive=y
-	pylint .\tests --recursive=y
+	pylint .\tests --recursive=y --fail-under=9

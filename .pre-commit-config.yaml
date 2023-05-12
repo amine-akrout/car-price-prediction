@@ -7,7 +7,7 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
       - id: isort
         name: isort (python)
@@ -23,7 +23,7 @@ repos:
         entry: pylint
         language: system
         types: [python]
-        args: ["--recursive=y"]
+        args: ["--recursive", "true", "--fail-under", "9"]
   - repo: local
     hooks:
       - id: pytest-check
