@@ -9,3 +9,4 @@ xgboost==1.7.5
 argument==1.4.0
 evidently==0.3.1
 pymongo==4.3.3
+evidently==0.3.1

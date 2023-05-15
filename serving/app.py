@@ -5,11 +5,12 @@ from __future__ import print_function
 
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pandas as pd
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 from mlflow.pyfunc import load_model
+from monitoring import generate_dashboard
 from pymongo import MongoClient
 
 MODEL_PATH = "./model"
@@ -150,6 +151,12 @@ def render_message():
 
     # Return the model results to the web page
     return render_template("index.html", message=message)
+
+
+@app.route("/dashboard")
+def dashboard():
+    dashboard_path = generate_dashboard()
+    return render_template(dashboard_path)
 
 
 if __name__ == "__main__":

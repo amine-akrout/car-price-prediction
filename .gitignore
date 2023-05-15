@@ -11,6 +11,7 @@ venv/
 # data
 data/*
 training/data/*
+serving/*.csv
 # pycache
 __pycache__/
 
@@ -28,3 +29,4 @@ model/*
 
 # mongo db data
 serving/mongo_data/*
+serving/call_mongodb.py

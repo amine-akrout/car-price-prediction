@@ -7,7 +7,7 @@ import pytest
 from sklearn.pipeline import Pipeline
 from xgboost import XGBRegressor
 
-from training.training import create_classifier, preprocess, split_data
+from training.model_training import create_classifier, preprocess, split_data
 
 
 @pytest.fixture(scope="session")
