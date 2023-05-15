@@ -1,13 +1,12 @@
 # Path: Makefile
 
 test:
-	pytest tests/
+	pytest training/tests/
 
 quality_checks:
 	isort .
 	black .
-	pylint .\training --recursive=y
-	pylint .\tests --recursive=y --fail-under=9
+	pylint .\training --recursive=y --fail-under=9
 
 train:
 	cd training && python model_training.py

@@ -32,4 +32,4 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-        args: ["tests/"]
+        args: ["training/tests/"]
