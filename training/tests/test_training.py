@@ -1,7 +1,7 @@
 """
 Module to test the training module
 """
-# pylint: disable=W0621, E0401
+# pylint: disable=W0621, E0401, C0413
 import os
 import sys
 

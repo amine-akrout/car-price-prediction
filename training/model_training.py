@@ -11,6 +11,7 @@ from pathlib import Path
 
 import mlflow
 import mlflow.xgboost
+import numpy as np
 import pandas as pd
 import structlog
 from get_data import download_data
@@ -108,9 +109,13 @@ def create_classifier() -> Pipeline:
             (
                 "cat",
                 categorical_transformer,
-                make_column_selector(dtype_include="object"),
+                make_column_selector(dtype_include=[np.dtype("object")]),
             ),
-            ("num", numeric_transformer, make_column_selector(dtype_exclude="object")),
+            (
+                "num",
+                numeric_transformer,
+                make_column_selector(dtype_exclude=[np.dtype("object")]),
+            ),
         ]
     )
     clf = Pipeline(
@@ -236,7 +241,7 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         y_pred = best_estimator.predict(X_test)
         mse = mean_squared_error(y_test, y_pred)
         # log mse
-        mlflow.log_metric("test_mse", mse)
+        mlflow.log_metric("test_mse", float(mse))
         logger.info("mse: %s", mse)
         params, metrics, tags, artifacts = fetch_logged_data(run.info.run_id)
         logger.info("params: %s", params)
@@ -264,7 +269,7 @@ def training_flow():
     mlflow.sklearn.autolog(silent=True)
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
 
-    data_path = SRC_DIR.parent / "data" / "CarPrice_Assignment.csv"
+    data_path = str(SRC_DIR.parent / "data" / "CarPrice_Assignment.csv")
     data = read_data(data_path)
     cleaned_data = preprocess(data)
     X_train, X_test, y_train, y_test = split_data(cleaned_data)
