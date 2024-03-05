@@ -1,5 +1,5 @@
 Flask==2.1.0
-mlflow==2.3.1
+mlflow==2.10.0
 pandas==1.4.3
 prefect==2.10.7
 pytest==7.1.2
