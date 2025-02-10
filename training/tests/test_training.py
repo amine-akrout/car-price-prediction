@@ -5,14 +5,13 @@ Module to test the training module
 import os
 import sys
 
-# Add the parent directory of the training directory to the system path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import pandas as pd
 import pytest
 from sklearn.pipeline import Pipeline
 from xgboost import XGBRegressor
 
+# Add the parent directory of the training directory to the system path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from training.get_data import download_data
 from training.model_training import create_classifier, preprocess, split_data
 
