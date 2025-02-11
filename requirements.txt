@@ -11,3 +11,4 @@ Requests==2.32.3
 scikit_learn==1.6.1
 structlog==25.1.0
 xgboost==2.1.4
+pre-commit==4.1.0

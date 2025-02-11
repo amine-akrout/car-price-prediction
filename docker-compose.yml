@@ -1,9 +1,8 @@
-version: "3.9"
 services:
   # Prefect server API
   server:
     container_name: server
-    image: prefecthq/prefect:2-python3.9
+    image: prefecthq/prefect:3.2-python3.9
     restart: always
     entrypoint: ["prefect", "server", "start"]
     environment:
@@ -12,15 +11,21 @@ services:
       - PREFECT_SERVER_API_HOST=0.0.0.0
     ports:
       - 4200:4200
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:4200/api/health"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 10
     networks:
       - prefect-network
 
-  # Prefect agent
-  agent:
-    container_name: agent
-    image: prefecthq/prefect:2-python3.9
+  # Prefect worker (replaces agent)
+  worker:
+    container_name: worker
+    image: prefecthq/prefect:3.2-python3.9
     restart: always
-    entrypoint: ["prefect", "agent", "start", "-q", "default"]
+    entrypoint:
+      ["sh", "-c", "sleep 10 && prefect worker start --pool default-pool"]
     environment:
       - PREFECT_API_URL=http://server:4200/api
     depends_on:
@@ -28,6 +33,7 @@ services:
         condition: service_started
     networks:
       - prefect-network
+
   # Deploy agent
   deploy:
     container_name: deploy
@@ -36,7 +42,7 @@ services:
     environment:
       - PREFECT_API_URL=http://server:4200/api
     depends_on:
-      agent:
+      worker:
         condition: service_started
     working_dir: "/root/training"
     volumes:
