@@ -12,6 +12,7 @@ venv/
 data/*
 training/data/*
 serving/*.csv
+
 # pycache
 __pycache__/
 
@@ -32,3 +33,8 @@ serving/mongo_data/*
 serving/call_mongodb.py
 /training/.env
 /training/gcp.json
+/serving/gcp.json
+/serving/.env
+
+# Ensure /serving/model/ is ignored
+/serving/model/
