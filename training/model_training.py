@@ -14,7 +14,6 @@ import mlflow.xgboost
 import numpy as np
 import pandas as pd
 import structlog
-from get_data import download_data
 from prefect import flow, task
 from prefect.tasks import task_input_hash
 from sklearn.compose import ColumnTransformer, make_column_selector
@@ -24,6 +23,8 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBRegressor
+
+from .get_data import download_data
 
 warnings.filterwarnings("ignore")
 

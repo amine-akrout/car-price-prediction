@@ -1,6 +1,7 @@
 """
 Module to test the training module
 """
+
 # pylint: disable=W0621, E0401, C0413
 import os
 import sys
@@ -21,7 +22,7 @@ def data():
     """
     Fixture to load the data
     """
-    data = pd.read_csv("./data/CarPrice_Assignment.csv")
+    data = pd.read_csv("../data/CarPrice_Assignment.csv")
     return data
 
 

@@ -7,8 +7,8 @@ from datetime import timedelta
 from model_training import training_flow
 
 if __name__ == "__main__":
-    training_flow.deploy(
+    training_flow.serve(
         name="model-training",
-        work_pool_name="default-pool",
+        tags=["training", "model"],
         interval=timedelta(minutes=10),
     )
