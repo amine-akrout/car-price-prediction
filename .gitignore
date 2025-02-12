@@ -30,3 +30,5 @@ model/*
 # mongo db data
 serving/mongo_data/*
 serving/call_mongodb.py
+/training/.env
+/training/gcp.json

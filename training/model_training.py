@@ -4,7 +4,9 @@ The dataset can be downloaded from:
 https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/
 """
 
+import os
 import shutil
+import sys
 import warnings
 from datetime import timedelta
 from pathlib import Path
@@ -14,6 +16,8 @@ import mlflow.xgboost
 import numpy as np
 import pandas as pd
 import structlog
+from dotenv import load_dotenv
+from google.cloud import storage
 from prefect import flow, task
 from prefect.tasks import task_input_hash
 from sklearn.compose import ColumnTransformer, make_column_selector
@@ -24,11 +28,15 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBRegressor
 
-from .get_data import download_data
+# local imports
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from training.get_data import download_data
 
 warnings.filterwarnings("ignore")
 
 logger = structlog.get_logger()
+load_dotenv(".env")
+
 
 SRC_DIR = Path(__file__).resolve().parent
 
@@ -215,10 +223,15 @@ def save_mlflow_model(best_estimator: Pipeline, model_path: str = "model"):
     local_path = Path(model_path)
     if local_path.exists():
         shutil.rmtree(local_path)
-    mlflow.sklearn.save_model(
-        sk_model=best_estimator,
-        path=local_path,
-    )
+    mlflow.sklearn.save_model(sk_model=best_estimator, path=local)
+    # Upload the model to GCS
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(os.getenv("GCS_BUCKET"))
+    for file in local_path.glob("**/*"):
+        if file.is_file():
+            blob = bucket.blob(f"models/{file.name}")
+            blob.upload_from_filename(str(file))
+            logger.info("Uploaded model to GCS: %s", blob.name)
 
 
 @task(log_prints=True, tags=["train_model"])
@@ -253,13 +266,7 @@ def train_model(best_estimator, X_train, y_train, X_test, y_test):
         # shutil.copytree(model_path, artifacts_path, dirs_exist_ok=True)
         logger.info("Saving model")
         # Delete the existing "model" directory and its contents if it exists
-        model_path = Path("model")
-        if model_path.exists():
-            shutil.rmtree("model")
-        mlflow.sklearn.save_model(
-            sk_model=best_estimator,
-            path="model",
-        )
+        save_mlflow_model(best_estimator, "model")
 
 
 @flow(name="training")
