@@ -166,6 +166,8 @@ Using Github actions and [cloud-run.yml](https://github.com/amine-akrout/car-pri
 
 ## 🌐 Demo
 
+![demo_webapp](./demo/webapp.gif)
+
 ## 🤝 Contributing
 
 1. Fork the repository
