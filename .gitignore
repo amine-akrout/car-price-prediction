@@ -9,7 +9,7 @@ venv/
 .prefect/
 
 # data
-data/*
+data/*.csv
 training/data/*
 serving/*.csv
 
