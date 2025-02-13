@@ -2,10 +2,6 @@
 Monitoring module for car prediction app
 """
 
-"""
-Monitoring module for car prediction app
-"""
-
 import sqlite3
 from datetime import datetime, timedelta
 
@@ -53,20 +49,6 @@ def preprocess(data):
         ["vokswagen", "vw"], "volkswagen"
     )
     return cleaned_df
-
-
-def get_last_30_days_data():
-    """Get data from MongoDB for the last 30 days"""
-    # calculate date range
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=30)
-
-    # query MongoDB for data within date range
-    cursor = collection.find({"created_at": {"$gte": start_date, "$lt": end_date}})
-
-    # convert MongoDB cursor to pandas dataframe
-    current_df = pd.DataFrame(list(cursor))
-    return current_df
 
 
 def get_refence_data():
