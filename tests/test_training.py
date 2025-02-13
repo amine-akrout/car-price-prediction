@@ -21,7 +21,7 @@ def data():
     """
     Fixture to load the data
     """
-    data = pd.read_csv("../data/CarPrice_Assignment.csv")
+    data = pd.read_csv("./data/CarPrice_Assignment.csv")
     return data
 
 
@@ -37,13 +37,18 @@ def test_preprocess(data):
     assert "CarBrand" in cleaned_data.columns
 
     # Check that some brand names have been corrected
-    assert "alfa-romeo" in cleaned_data["CarBrand"].unique()
-    assert "mazda" in cleaned_data["CarBrand"].unique()
-    assert "nissan" in cleaned_data["CarBrand"].unique()
-    assert "porsche" in cleaned_data["CarBrand"].unique()
-    assert "toyota" in cleaned_data["CarBrand"].unique()
-    assert "volkswagen" in cleaned_data["CarBrand"].unique()
-    assert "volvo" in cleaned_data["CarBrand"].unique()
+    expected_brands = {
+        "alfa-romeo",
+        "mazda",
+        "nissan",
+        "porsche",
+        "toyota",
+        "volkswagen",
+        "volvo",
+    }
+    actual_brands = set(cleaned_data["CarBrand"].unique())
+
+    assert expected_brands.issubset(actual_brands)
 
 
 def test_split_data(data):
