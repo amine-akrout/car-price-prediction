@@ -3,6 +3,7 @@ This is a simple FastAPI web app that predicts the price of a car based on user 
 """
 
 import os
+import warnings
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import List, Optional
@@ -23,6 +24,8 @@ from pydantic import BaseModel, validator
 from utils import load_model_from_gcs
 
 logger = structlog.get_logger()
+warnings.filterwarnings("ignore")
+
 
 load_dotenv(".env")
 
@@ -235,6 +238,9 @@ async def render_message(
     except Exception as error:
         message = f"Error encountered. Try with other values. Error: {str(error)}"
         logger.error(message)
+        return templates.TemplateResponse(
+            "index.html", {"request": request, "message": "Please enter valid values."}
+        )
 
     return templates.TemplateResponse(
         "index.html", {"request": request, "message": message}
