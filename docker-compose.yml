@@ -11,24 +11,6 @@ services:
       - PREFECT_SERVER_API_HOST=0.0.0.0
     ports:
       - 4200:4200
-    networks:
-      - prefect-network
-
-  # # Prefect worker (replaces agent)
-  # worker:
-  #   container_name: worker
-  #   image: prefecthq/prefect:3.2-python3.9
-  #   restart: always
-  #   entrypoint:
-  #     ["sh", "-c", "sleep 10 && prefect worker start --pool default-pool"]
-  #   environment:
-  #     - PREFECT_API_URL=http://server:4200/api
-  #   depends_on:
-  #     server:
-  #       condition: service_started
-  #   networks:
-  #     - prefect-network
-
   # Deploy agent
   deploy:
     container_name: deploy
@@ -44,6 +26,3 @@ services:
       - ./training:/root/training
     networks:
       - prefect-network
-networks:
-  prefect-network:
-    name: prefect-network

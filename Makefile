@@ -1,21 +1,20 @@
 # Path: Makefile
 
 test:
-	pytest training/tests/
+	pytest tests/
 
 quality_checks:
-	isort .
-	black .
-	pylint .\training --recursive=y --fail-under=9
+	ruff check . --fix
 
 train:
 	cd training && python model_training.py
 
-deploy:
-	docker-compose up -d
+deploy-prefect:
+	docker-compose up --build
 
-serve:
-	cd serving && docker-compose build && docker-compose up -d
+
+serve-api:
+	cd serving && docker-compose up --build
 
 stop:
 	docker-compose down
