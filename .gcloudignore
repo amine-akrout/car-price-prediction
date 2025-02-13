@@ -1,16 +1,14 @@
 # python env
-venv/
+- venv/
 
 # python idea
-.idea/
+- .idea/
 
 # data
-data/*
+- data/*
 
 # pycache
-__pycache__/
+- __pycache__/
 
-README.md
-
-
-model.py
+- README.md
+- model.py

@@ -21,7 +21,7 @@ python ./model.py
 </pre>
 
 **MLflow experiment**
-![demo_webapp](./demo/mlflow.JPG)  
+![demo_webapp](./demo/mlflow.JPG)
 
 ## Test locally
 To test the web app locally using docker, start by building the image from the Dockerfile
@@ -49,7 +49,7 @@ Using Github actions and [cloud-run.yml](https://github.com/amine-akrout/car-pri
 ## Demo
 
 
-![demo_webapp](./demo/webapp.gif)  
+![demo_webapp](./demo/webapp.gif)
 
 
 

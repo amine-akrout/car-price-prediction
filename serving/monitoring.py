@@ -2,16 +2,33 @@
 Monitoring module for car prediction app
 """
 
+import sqlite3
 from datetime import datetime, timedelta
 
 import pandas as pd
 from evidently.metric_preset import DataDriftPreset
 from evidently.report import Report
-from pymongo import MongoClient
 
-client = MongoClient("mongodb://mongo:27017")
-db = client["car_prediction"]
-collection = db["predictions"]
+DATABASE_NAME = "predictions.db"
+
+
+def get_db():
+    return sqlite3.connect(DATABASE_NAME)
+
+
+def get_last_30_days_data():
+    """Get data from SQLite for the last 30 days"""
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=30)
+
+    conn = get_db()
+    query = """SELECT * FROM predictions
+               WHERE datetime(created_at) BETWEEN ? AND ?"""
+    current_df = pd.read_sql(
+        query, conn, params=(start_date.isoformat(), end_date.isoformat())
+    )
+    conn.close()
+    return current_df
 
 
 def preprocess(data):
@@ -32,20 +49,6 @@ def preprocess(data):
         ["vokswagen", "vw"], "volkswagen"
     )
     return cleaned_df
-
-
-def get_last_30_days_data():
-    """Get data from MongoDB for the last 30 days"""
-    # calculate date range
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=30)
-
-    # query MongoDB for data within date range
-    cursor = collection.find({"created_at": {"$gte": start_date, "$lt": end_date}})
-
-    # convert MongoDB cursor to pandas dataframe
-    current_df = pd.DataFrame(list(cursor))
-    return current_df
 
 
 def get_refence_data():

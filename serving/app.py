@@ -1,163 +1,136 @@
-"""
-This is a simple Flask web app that predicts the price of a car based on the user inputs.
-"""
-from __future__ import print_function
+# app.py
+import warnings
+from contextlib import asynccontextmanager
 
-import os
-import sys
-from datetime import datetime, timedelta
-
-import pandas as pd
-from flask import Flask, jsonify, render_template, request
-from mlflow.pyfunc import load_model
+import structlog
+import uvicorn
+from db import init_db
+from dotenv import load_dotenv
+from fastapi import FastAPI, Form, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from model_loader import load_model_from_gcs_and_initialize, unload_model
+from models import CarPredictionInput
 from monitoring import generate_dashboard
-from pymongo import MongoClient
+from predictor import make_prediction, save_prediction_to_db
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-MODEL_PATH = "./model"
-# Load model as a PyFuncModel.
-LOADED_MODEL = load_model(MODEL_PATH)
-
-client = MongoClient("mongodb://mongo:27017")
-db = client["car_prediction"]
-collection = db["predictions"]
+logger = structlog.get_logger()
+warnings.filterwarnings("ignore")
+load_dotenv(".env")
 
 
-app = Flask(__name__)
+init_db()
 
 
-@app.route("/")
-def entry_page():
-    """Displays the input webpage"""
-    # Nicepage template of the webpage
-    return render_template("index.html")
+# Move model loading/unloading to a separate context manager function
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Context manager to load and unload the model when the app starts and stops.
+    """
+    load_model_from_gcs_and_initialize()
+    yield
+    unload_model()
 
 
-@app.route("/predict", methods=["GET", "POST"])
-def render_message():
-    """Generates the predicted price and renders it in the html"""
+app = FastAPI(lifespan=lifespan)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    message = "Error: Please enter valid values."
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "message": message}
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    message = "An error occurred. Please try again."
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "message": message}
+    )
+
+
+@app.get("/", response_class=HTMLResponse)
+async def entry_page(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.post("/predict", response_class=HTMLResponse)
+async def render_message(
+    request: Request,
+    CarBrand: str = Form(...),
+    fueltype: str = Form(...),
+    aspiration: str = Form(...),
+    doornumber: str = Form(...),
+    carbody: str = Form(...),
+    drivewheel: str = Form(...),
+    enginelocation: str = Form(...),
+    wheelbase: float = Form(...),
+    carlength: float = Form(...),
+    carwidth: float = Form(...),
+    carheight: float = Form(...),
+    curbweight: int = Form(...),
+    enginetype: str = Form(...),
+    cylindernumber: str = Form(...),
+    enginesize: int = Form(...),
+    fuelsystem: str = Form(...),
+    boreratio: float = Form(...),
+    horsepower: int = Form(...),
+    citympg: int = Form(...),
+    highwaympg: int = Form(...),
+):
     try:
-        # Get data input
-        CarBrand = request.form["CarBrand"]
-        fueltype = request.form["fueltype"]
-        aspiration = request.form["aspiration"]
-        doornumber = request.form["doornumber"]
-        carbody = request.form["carbody"]
-        drivewheel = request.form["drivewheel"]
-        enginelocation = request.form["enginelocation"]
-        wheelbase = float(request.form["wheelbase"])
-        carlength = float(request.form["carlength"])
-        carwidth = float(request.form["carwidth"])
-        carheight = float(request.form["carheight"])
-        curbweight = int(request.form["curbweight"])
-        enginetype = request.form["enginetype"]
-        cylindernumber = request.form["cylindernumber"]
-        enginesize = int(request.form["enginesize"])
-        fuelsystem = request.form["fuelsystem"]
-        boreratio = float(request.form["boreratio"])
-        horsepower = int(request.form["horsepower"])
-        citympg = int(request.form["citympg"])
-        highwaympg = int(request.form["highwaympg"])
-        data = [
-            [
-                CarBrand,
-                fueltype,
-                aspiration,
-                doornumber,
-                carbody,
-                drivewheel,
-                enginelocation,
-                wheelbase,
-                carlength,
-                carwidth,
-                carheight,
-                curbweight,
-                enginetype,
-                cylindernumber,
-                enginesize,
-                fuelsystem,
-                boreratio,
-                horsepower,
-                citympg,
-                highwaympg,
-            ]
-        ]
-        preds_df = pd.DataFrame(
-            data,
-            columns=[
-                "CarBrand",
-                "fueltype",
-                "aspiration",
-                "doornumber",
-                "carbody",
-                "drivewheel",
-                "enginelocation",
-                "wheelbase",
-                "carlength",
-                "carwidth",
-                "carheight",
-                "curbweight",
-                "enginetype",
-                "cylindernumber",
-                "enginesize",
-                "fuelsystem",
-                "boreratio",
-                "horsepower",
-                "citympg",
-                "highwaympg",
-            ],
+        input_data = CarPredictionInput(
+            CarBrand=CarBrand,
+            fueltype=fueltype,
+            aspiration=aspiration,
+            doornumber=doornumber,
+            carbody=carbody,
+            drivewheel=drivewheel,
+            enginelocation=enginelocation,
+            wheelbase=wheelbase,
+            carlength=carlength,
+            carwidth=carwidth,
+            carheight=carheight,
+            curbweight=curbweight,
+            enginetype=enginetype,
+            cylindernumber=cylindernumber,
+            enginesize=enginesize,
+            fuelsystem=fuelsystem,
+            boreratio=boreratio,
+            horsepower=horsepower,
+            citympg=citympg,
+            highwaympg=highwaympg,
         )
-
-        preds = LOADED_MODEL.predict(pd.DataFrame(preds_df))
-
-        print("Python module executed successfully")
-        message = "Estimated price : {} ".format(round(preds[0], 2))
-        print(message, file=sys.stderr)
-
-        # Save the data and prediction to MongoDB
-        prediction_data = {
-            "CarBrand": CarBrand,
-            "fueltype": fueltype,
-            "aspiration": aspiration,
-            "doornumber": doornumber,
-            "carbody": carbody,
-            "drivewheel": drivewheel,
-            "enginelocation": enginelocation,
-            "wheelbase": float(wheelbase),
-            "carlength": float(carlength),
-            "carwidth": float(carwidth),
-            "carheight": float(carheight),
-            "curbweight": int(curbweight),
-            "enginetype": enginetype,
-            "cylindernumber": cylindernumber,
-            "enginesize": int(enginesize),
-            "fuelsystem": fuelsystem,
-            "boreratio": float(boreratio),
-            "horsepower": int(horsepower),
-            "citympg": int(citympg),
-            "highwaympg": int(highwaympg),
-            "predicted_price": float(preds[0]),
-            "created_at": datetime.utcnow(),
-        }
-        collection.insert_one(prediction_data)
-
+        predicted_price = make_prediction(input_data)
+        save_prediction_to_db(input_data, predicted_price)
+        message = f"Estimated price: {predicted_price}"
     except Exception as error:
-        # Store error to pass to the web page
-        message = (
-            "Error encountered. Try with other values. ErrorClass: {}, Argument: {} and"
-            " Traceback details are: {}".format(
-                error.__class__, error.args, error.__doc__
-            )
-        )
+        message = "Error: Please enter valid values."
+        logger.error(f"Error encountered: {str(error)}")
 
-    # Return the model results to the web page
-    return render_template("index.html", message=message)
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "message": message}
+    )
 
 
-@app.route("/dashboard")
-def dashboard():
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
     dashboard_path = generate_dashboard()
-    return render_template(dashboard_path)
+    return templates.TemplateResponse(dashboard_path, {"request": request})
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    uvicorn.run(app, host="0.0.0.0", port=8000)
