@@ -38,3 +38,4 @@ serving/call_mongodb.py
 
 # Ensure /serving/model/ is ignored
 /serving/model/
+/serving/predictions.db
