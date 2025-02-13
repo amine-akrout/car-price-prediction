@@ -3,7 +3,6 @@ mlflow_skinny==2.20.1
 numpy==2.2.2
 pandas==2.2.3
 prefect==3.2.1
-pymongo==4.11.1
 pytest==8.3.4
 Requests==2.32.3
 scikit_learn==1.6.1
