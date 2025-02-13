@@ -200,7 +200,6 @@ def hyperparameters_optimization(clf, X_train, y_train):
         "classifier__objective": ["reg:squarederror"],
     }
     with mlflow.start_run(run_name="hp_opt") as run:
-
         grid_search = GridSearchCV(clf, param_grid, cv=5, verbose=4, n_jobs=-1)
 
         grid_search.fit(X_train, y_train)
@@ -223,7 +222,7 @@ def save_mlflow_model(best_estimator: Pipeline, model_path: str = "model"):
     local_path = Path(model_path)
     if local_path.exists():
         shutil.rmtree(local_path)
-    mlflow.sklearn.save_model(sk_model=best_estimator, path=local)
+    mlflow.sklearn.save_model(sk_model=best_estimator, path=model_path)
     # Upload the model to GCS
     storage_client = storage.Client()
     bucket = storage_client.bucket(os.getenv("GCS_BUCKET"))

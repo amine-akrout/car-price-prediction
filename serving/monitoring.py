@@ -22,7 +22,7 @@ def get_last_30_days_data():
     start_date = end_date - timedelta(days=30)
 
     conn = get_db()
-    query = """SELECT * FROM predictions 
+    query = """SELECT * FROM predictions
                WHERE datetime(created_at) BETWEEN ? AND ?"""
     current_df = pd.read_sql(
         query, conn, params=(start_date.isoformat(), end_date.isoformat())

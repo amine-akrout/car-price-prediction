@@ -13,7 +13,6 @@ from xgboost import XGBRegressor
 
 # Add the parent directory of the training directory to the system path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from training.get_data import download_data
 from training.model_training import create_classifier, preprocess, split_data
 
 

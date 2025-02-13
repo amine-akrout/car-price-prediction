@@ -3,7 +3,6 @@ This module contains functions to get data from Kaggle
 and save it to data folder in the root directory
 """
 
-
 import json
 import os
 import zipfile

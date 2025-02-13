@@ -1,5 +1,4 @@
 # app.py
-import os
 import warnings
 from contextlib import asynccontextmanager
 
@@ -9,14 +8,13 @@ from db import init_db
 from dotenv import load_dotenv
 from fastapi import FastAPI, Form, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from model_loader import load_model_from_gcs_and_initialize, unload_model
 from models import CarPredictionInput
 from monitoring import generate_dashboard
 from predictor import make_prediction, save_prediction_to_db
-from pydantic import BaseModel
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 logger = structlog.get_logger()
@@ -45,7 +43,6 @@ templates = Jinja2Templates(directory="templates")
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-
     message = "Error: Please enter valid values."
     return templates.TemplateResponse(
         "index.html", {"request": request, "message": message}

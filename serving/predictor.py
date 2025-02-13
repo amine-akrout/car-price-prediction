@@ -7,7 +7,6 @@ from datetime import datetime
 
 import pandas as pd
 from db import DB_FILE
-from mlflow.pyfunc import load_model
 from model_loader import LOADED_MODEL
 
 
@@ -25,8 +24,8 @@ def save_prediction_to_db(input_data, predicted_price):
     cursor.execute(
         """
         INSERT INTO predictions (
-            CarBrand, fueltype, aspiration, doornumber, carbody, drivewheel, enginelocation, 
-            wheelbase, carlength, carwidth, carheight, curbweight, enginetype, cylindernumber, 
+            CarBrand, fueltype, aspiration, doornumber, carbody, drivewheel, enginelocation,
+            wheelbase, carlength, carwidth, carheight, curbweight, enginetype, cylindernumber,
             enginesize, fuelsystem, boreratio, horsepower, citympg, highwaympg, predicted_price, created_at
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
